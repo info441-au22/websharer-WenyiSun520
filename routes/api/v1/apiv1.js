@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import fetch from "node-fetch";
 import parser from "node-html-parser";
 let router = express.Router();
@@ -17,52 +17,60 @@ router.get("/urls/preview", async (req, res) => {
   let urlTextContents = await urlRawContents.text();
 
   let htmlPage = parser.parse(urlTextContents); // parse responsed html
+  // console.log("htmlpage: " + htmlPage); // debug: get all meta tags successfully
+
+  let jsonInfo = htmlPage.querySelector("script[type='application/ld+json']");
+  // console.log(jsonInfo);
+  // console.log("type of jsonInof: " + typeof jsonInfo);
+  let movieRawInfo = jsonInfo.childNodes[0].parentNode.rawText;
+  let movieInfoJson = JSON.parse(movieRawInfo);
+
+  // console.log(movieRawInfo);
+  // console.log(movieInfoJson);
+  // console.log("type of raw info is" + typeof movieInfoJson);
+  let avgRating = movieInfoJson.aggregateRating.ratingValue;
+  let genre = movieInfoJson.genre;
+
+
   let metaTags = htmlPage.querySelectorAll("meta"); // select all meta tags
   // console.log("url meta tags: " + metaTags); // debug: get all meta tags successfully
   let basicMeta = metaTags.filter((tag) => {
-    // find the tags that have basic meta property
-    if (tag.attributes.property == "og:title") {
-      if (tag.attributes.content == "") {
-        let titleTag = html.querySelector("title");
-        if (titleTag == null) {
-          tag.attributes.content = query; // title is query if title tag is missing
-        } else {
-          tag.attributes.content = titleTag;
-        }
-      }
-      return true;
-    }
-
-    if (tag.attributes.property == "og:url") {
-      if (tag.attributes.content == "") {
-        tag.attributes.content = query;
-      }
-      return true;
-    }
     if (
-      tag.attributes.property == "og:description" ||
-      tag.attributes.property == "og:image"
-    ){return true;}
-      
+      tag.getAttribute("property") == "og:title" ||
+      tag.getAttribute("property") == "og:url" ||
+      tag.getAttribute("property") == "og:description" ||
+      tag.getAttribute("property") == "og:image"
+    )
+      return true;
   });
-
   // console.log("url basic tags: " + basicMeta); //debug: get tags properly
 
   let urlTag = basicMeta.find((tag) => tag.attributes.property == "og:url");
+  if (urlTag.getAttribute("content") == undefined) {
+    urlTag.setAttribute("content", query);
+  }
   let titleTag = basicMeta.find((tag) => tag.attributes.property == "og:title");
+  if (titleTag.getAttribute("content") == undefined) {
+    let htmlTitle = htmlPage.querySelector("title");
+    if (htmlTitle == null) {
+      titleTag.setAttribute("content", htmlTitle);
+    } else {
+      titleTag.setAttribute("content", query);
+    }
+  }
   let imgTag = basicMeta.find((tag) => tag.attributes.property == "og:image");
   let descripTag = basicMeta.find(
     (tag) => tag.attributes.property == "og:description"
   );
   // debug: finding basic tags:
-  console.log("finding tags:");
-  console.log("urltag: "+ urlTag);
-  console.log("titleTag: "+titleTag);
-  console.log("imgTag: "+ imgTag);
-  console.log("descripTag: "+ descripTag);
+  // console.log("finding tags:");
+  // console.log("urltag: "+ urlTag);
+  // console.log("titleTag: "+titleTag);
+  // console.log("imgTag: "+ imgTag);
+  // console.log("descripTag: "+ descripTag);
 
   let results =
-    " <div style='max-width: 300px; border: solid 1px; padding: 3px; text-align: center;'> " +
+    " <div class='output-box'> " +
     "<a href='" +
     urlTag.getAttribute("content") +
     "'>" +
@@ -70,15 +78,19 @@ router.get("/urls/preview", async (req, res) => {
     "<p><strong>" +
     titleTag.getAttribute("content") +
     "</strong></p>" +
+    "<p><strong>Average Rating: " +
+    avgRating +
+    "</strong></p>" +
     "<img src='" +
     imgTag.getAttribute("content") +
     "'style='max-height: 200px; max-width:270px;'>" +
     "</a>" +
+    "<p>Genre: "+
+    genre+
+    "</p>"+
     "<p>" +
     descripTag.getAttribute("content") +
-    "</p></div>";
-
-  console.log("Results String: " + results); //debug: get tags properly
+    "</p>";
   res.send(results);
 });
 
