@@ -35,34 +35,51 @@ router.get("/urls/preview", async (req, res) => {
 
     if (tag.attributes.property == "og:url") {
       if (tag.attributes.content == "") {
-        tag.attributes.content == query;
+        tag.attributes.content = query;
       }
       return true;
     }
     if (
       tag.attributes.property == "og:description" ||
       tag.attributes.property == "og:image"
-    )
-      return true;
+    ){return true;}
+      
   });
 
-  console.log("url basic tags: " + basicMeta); //debug: get tags properly
+  // console.log("url basic tags: " + basicMeta); //debug: get tags properly
 
-  let htmlStr = basicMeta.map((tagInfo) => {
-      return (
-        "<h3>Property " +
-        tagInfo.attributes.property +
-        "</h3>" +
-        "<p>content: " +
-        tagInfo.attributes.content +
-        "</p>" +
-        "<br>" +
-        "<br>"
-      );
-    })
-    .join("");
-  console.log("HTML String: " + htmlStr); //debug: get tags properly
-  res.send(htmlStr);
+  let urlTag = basicMeta.find((tag) => tag.attributes.property == "og:url");
+  let titleTag = basicMeta.find((tag) => tag.attributes.property == "og:title");
+  let imgTag = basicMeta.find((tag) => tag.attributes.property == "og:image");
+  let descripTag = basicMeta.find(
+    (tag) => tag.attributes.property == "og:description"
+  );
+  // debug: finding basic tags:
+  console.log("finding tags:");
+  console.log("urltag: "+ urlTag);
+  console.log("titleTag: "+titleTag);
+  console.log("imgTag: "+ imgTag);
+  console.log("descripTag: "+ descripTag);
+
+  let results =
+    " <div style='max-width: 300px; border: solid 1px; padding: 3px; text-align: center;'> " +
+    "<a href='" +
+    urlTag.getAttribute("content") +
+    "'>" +
+    "<br>" +
+    "<p><strong>" +
+    titleTag.getAttribute("content") +
+    "</strong></p>" +
+    "<img src='" +
+    imgTag.getAttribute("content") +
+    "'style='max-height: 200px; max-width:270px;'>" +
+    "</a>" +
+    "<p>" +
+    descripTag.getAttribute("content") +
+    "</p></div>";
+
+  console.log("Results String: " + results); //debug: get tags properly
+  res.send(results);
 });
 
 export default router;
