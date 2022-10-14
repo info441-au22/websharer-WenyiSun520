@@ -27,68 +27,57 @@ router.get("/urls/preview", async (req, res) => {
   }
 
   let metaTags = htmlPage.querySelectorAll("meta"); // select all meta tags
+
   let basicMeta = metaTags.filter((tag) => {
+    let propertyOfTag = tag.getAttribute("property");
     if (
-      tag.getAttribute("property") == "og:title" ||
-      tag.getAttribute("property") == "og:url" ||
-      tag.getAttribute("property") == "og:description" ||
-      tag.getAttribute("property") == "og:image"
-    )return true;
+      propertyOfTag == "og:title" ||
+      propertyOfTag == "og:url" ||
+      propertyOfTag == "og:description" ||
+      propertyOfTag == "og:image"
+    )
+      return true;
     else return false;
   });
-  console.log("basic meta tags: " + basicMeta); // debug
+  // console.log("basic meta tags: " + basicMeta); // debug
+
   let urlTag = basicMeta.find(
     (tag) => tag.getAttribute("property") == "og:url"
   );
-  if (urlTag == undefined) {
-    urlTag = document.createElement("meta");
+  if (urlTag != undefined && urlTag.getAttribute("content")=="") {
     urlTag.setAttribute("content", query);
   }
+
   let titleTag = basicMeta.find(
     (tag) => tag.getAttribute("property") == "og:title"
   );
-  if (titleTag== undefined) {
-    titleTag = document.createElement("meta");
-    let htmlTitle = htmlPage.querySelector("title");
-    if (htmlTitle == null) {
-      titleTag.setAttribute("content", htmlTitle);
-    } else {
-      titleTag.setAttribute("content", query);
-    }
+  let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
+  if(htmlTitle == undefined){
+    htmlTitle = query;
   }
   let imgTag = basicMeta.find((tag) => tag.attributes.property == "og:image");
   let descripTag = basicMeta.find(
     (tag) => tag.attributes.property == "og:description"
   );
-  // debug: finding basic tags:
-  // console.log("finding tags:");
-  // console.log("urltag: "+ urlTag);
-  // console.log("titleTag: "+titleTag);
-  // console.log("imgTag: "+ imgTag);
-  // console.log("descripTag: "+ descripTag);
 
-  let results =
-    " <div class='output-box'> " +
-    "<a href='" +
-    urlTag.getAttribute("content") +
-    "'>" +
-    "<br>" +
-    "<p><strong>" +
-    titleTag.getAttribute("content") +
-    "</strong></p>" +
-    "<p><strong>" +
-    avgRating +
-    "</strong></p>" +
-    "<img src='" +
-    imgTag.getAttribute("content") +
-    "'style='max-height: 200px; max-width:270px;'>" +
-    "</a>" +
-    "<p>" +
-    genre +
-    "</p>" +
-    "<p>" +
-    descripTag.getAttribute("content") +
-    "</p>";
+  let results = `
+    <div class='output-box'>
+    <a href=
+    ${urlTag == undefined ? query : urlTag.getAttribute("content")}
+    ><br>
+    <p><strong>
+     ${titleTag == undefined ? htmlTitle : titleTag.getAttribute("content")} 
+    </strong></p>
+    <p><strong>
+    ${avgRating} 
+    </strong></p>
+    <img class="input-img" src=
+    ${imgTag == undefined ? "" : imgTag.getAttribute("content")}> 
+    </a><p>
+    ${genre}
+    </p><p>
+    ${descripTag == undefined ? "" : descripTag.getAttribute("content")}
+    </p>`;
   res.send(results);
 });
 

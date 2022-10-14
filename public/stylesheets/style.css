@@ -38,6 +38,11 @@ h1 {
   margin-left: 35%;
 }
 
+.input-img {
+  max-height: 200px;
+  max-width: 270px
+}
+
 .output-box {
   margin-top: 10px;
   margin-left: 32%;
