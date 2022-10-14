@@ -3,54 +3,52 @@ import fetch from "node-fetch";
 import parser from "node-html-parser";
 let router = express.Router();
 
-// router.get("/", (req, res) => {
-//   res.send("Respond from apiv1.js");
-// });
-
 router.get("/urls/preview", async (req, res) => {
   let query = req.query.url;
-  //console.log("query is : " + query); // debug: get query successfully
   let urlRawContents = await fetch(query).catch(function (err) {
     console.log("there is an error when fetching url content: " + err);
     res.send("there is an error when fetching url content: " + err); // send error msg when fetch failed
   });
   let urlTextContents = await urlRawContents.text();
-
   let htmlPage = parser.parse(urlTextContents); // parse responsed html
-  // console.log("htmlpage: " + htmlPage); // debug: get all meta tags successfully
 
-  let jsonInfo = htmlPage.querySelector("script[type='application/ld+json']");
-  // console.log(jsonInfo);
-  // console.log("type of jsonInof: " + typeof jsonInfo);
-  let movieRawInfo = jsonInfo.childNodes[0].parentNode.rawText;
-  let movieInfoJson = JSON.parse(movieRawInfo);
-
-  // console.log(movieRawInfo);
-  // console.log(movieInfoJson);
-  // console.log("type of raw info is" + typeof movieInfoJson);
-  let avgRating = movieInfoJson.aggregateRating.ratingValue;
-  let genre = movieInfoJson.genre;
-
+  // Creative Component: if query is from imdb.com, get the average score and genre:
+  let avgRating = "";
+  let genre = "";
+  if (query.includes("imdb.com")) {
+    let movieInfoScript = htmlPage.querySelector(
+      "script[type='application/ld+json']"
+    );
+    let movieRawText = movieInfoScript.childNodes[0].parentNode.rawText;
+    let movieInfoJson = JSON.parse(movieRawText);
+    // add below two variables to results text:
+    avgRating = "Average Rating: " + movieInfoJson.aggregateRating.ratingValue;
+    genre = "Genre: " + movieInfoJson.genre;
+  }
 
   let metaTags = htmlPage.querySelectorAll("meta"); // select all meta tags
-  // console.log("url meta tags: " + metaTags); // debug: get all meta tags successfully
   let basicMeta = metaTags.filter((tag) => {
     if (
       tag.getAttribute("property") == "og:title" ||
       tag.getAttribute("property") == "og:url" ||
       tag.getAttribute("property") == "og:description" ||
       tag.getAttribute("property") == "og:image"
-    )
-      return true;
+    )return true;
+    else return false;
   });
-  // console.log("url basic tags: " + basicMeta); //debug: get tags properly
-
-  let urlTag = basicMeta.find((tag) => tag.attributes.property == "og:url");
-  if (urlTag.getAttribute("content") == undefined) {
+  console.log("basic meta tags: " + basicMeta); // debug
+  let urlTag = basicMeta.find(
+    (tag) => tag.getAttribute("property") == "og:url"
+  );
+  if (urlTag == undefined) {
+    urlTag = document.createElement("meta");
     urlTag.setAttribute("content", query);
   }
-  let titleTag = basicMeta.find((tag) => tag.attributes.property == "og:title");
-  if (titleTag.getAttribute("content") == undefined) {
+  let titleTag = basicMeta.find(
+    (tag) => tag.getAttribute("property") == "og:title"
+  );
+  if (titleTag== undefined) {
+    titleTag = document.createElement("meta");
     let htmlTitle = htmlPage.querySelector("title");
     if (htmlTitle == null) {
       titleTag.setAttribute("content", htmlTitle);
@@ -78,16 +76,16 @@ router.get("/urls/preview", async (req, res) => {
     "<p><strong>" +
     titleTag.getAttribute("content") +
     "</strong></p>" +
-    "<p><strong>Average Rating: " +
+    "<p><strong>" +
     avgRating +
     "</strong></p>" +
     "<img src='" +
     imgTag.getAttribute("content") +
     "'style='max-height: 200px; max-width:270px;'>" +
     "</a>" +
-    "<p>Genre: "+
-    genre+
-    "</p>"+
+    "<p>" +
+    genre +
+    "</p>" +
     "<p>" +
     descripTag.getAttribute("content") +
     "</p>";
