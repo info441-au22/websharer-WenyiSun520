@@ -15,7 +15,7 @@ router.get("/urls/preview", async (req, res) => {
   // Creative Component: if query is from imdb.com, get the average score and genre:
   let avgRating = "";
   let genre = "";
-  if (query.includes("imdb.com")) {
+  if (query.includes("imdb.com/title/")) {
     let movieInfoScript = htmlPage.querySelector(
       "script[type='application/ld+json']"
     );
