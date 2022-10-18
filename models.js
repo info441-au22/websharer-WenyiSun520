@@ -11,6 +11,7 @@ async function main(){
     const postSchema = new mongoose.Schema({
         url: String,
         description: String,
+        isFav: Boolean,
         created_date: Date
     })
     console.log("Connect to mongodb successfully!");

@@ -9,22 +9,41 @@ function init(){
 async function loadPosts(){
     document.getElementById("posts_box").innerText = "Loading...";
     let postsJson = await fetchJSON(`api/${apiVersion}/posts`)
-    
+    let collectSign =  "&#9733;";
     let postsHtml = postsJson.map(postInfo => {
-        return `<div class="post">${postInfo.description}${postInfo.htmlPreview}</div>`
+        return `<div class="post">
+        ${postInfo.description}
+        ${postInfo.isFav == true ? collectSign : ""}
+        ${postInfo.htmlPreview}</div>`
     }).join("\n");
     document.getElementById("posts_box").innerHTML = postsHtml;
 }
+
+async function loadFav() {
+  let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
+  let collectSign = "&#9733;";
+  let postsHtml = postsJson
+    .map((postInfo) => {
+      return `<div class="post">
+        ${postInfo.description}
+        ${postInfo.isFav == true ? collectSign : ""}
+        ${postInfo.htmlPreview}</div>`;
+    })
+    .join("\n");
+  document.getElementById("fav_box").innerHTML = postsHtml;
+}
+
 
 async function postUrl(){
     document.getElementById("postStatus").innerHTML = "sending data..."
     let url = document.getElementById("urlInput").value;
     let description = document.getElementById("descriptionInput").value;
+    let isFav = document.getElementById("fav").value;
 
     try{
         await fetchJSON(`api/${apiVersion}/posts`, {
             method: "POST",
-            body: {url: url, description: description}
+            body: {url: url, description: description, isFav:isFav}
         })
     }catch(error){
         document.getElementById("postStatus").innerText = "Error"
@@ -32,6 +51,7 @@ async function postUrl(){
     }
     document.getElementById("urlInput").value = "";
     document.getElementById("descriptionInput").value = "";
+    document.getElementById("fav").value = "";
     document.getElementById("url_previews").innerHTML = "";
     document.getElementById("postStatus").innerHTML = "successfully uploaded"
     loadPosts();
