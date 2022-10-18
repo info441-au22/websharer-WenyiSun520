@@ -1,53 +1,19 @@
 body {
-  background-color: darkgray;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* padding: 0 50px 0 50px; */
-  font: 14px;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-nav.navbar {
-  position: fixed;
-  /*Set the navbar to fixed position  */
-  top: 0;
-  /* Position the navbar at the top of the page */
-  width: 20%
+a {
+  color: #00B7FF;
 }
 
-h1 {
-  background-image: url("./bgpic.jpeg");
-  padding-left: 40%;
-  padding-right: 40%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  color: whitesmoke;
-  font-weight: bold;
-
-
+#posts_box{
+  display: flex;
+  flex-wrap: wrap;
 }
 
-
-.prompt-text {
-  margin-left: 30%;
-  font-weight: bold;
-  color: white;
-}
-
-.input-box {
-  margin-left: 35%;
-}
-
-.input-img {
-  max-height: 200px;
-  max-width: 270px
-}
-
-.output-box {
-  margin-top: 10px;
-  margin-left: 32%;
-  max-width: 300px;
+.post{
+  width:300px;
+  margin:5px;
   border: solid 1px;
-  padding: 3px;
-  text-align: center;
 }
