@@ -13,7 +13,6 @@ async function main(){
         description: String,
         created_date: Date
     })
-    //debug:
     console.log("Connect to mongodb successfully!");
      // save the model in the global variable "models" with key post
     models.Post = mongoose.model("model", postSchema);
