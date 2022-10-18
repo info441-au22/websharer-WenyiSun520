@@ -28,6 +28,33 @@ a {
   flex-wrap: wrap;
 }
 
+.post {
+  width: 300px;
+  margin: 5px;
+  border: solid 1px;
+}
+
+.post .description-box {
+  display: flex;
+  flex-direction: row;
+  width: inherit;
+  justify-content: space-between;
+
+}
+
+.post .description-box p {
+  padding-left: 5px;
+  padding-top: 5px;
+  color: #00B7FF;
+  font-weight: bold;
+
+}
+
+.post .description-box .star {
+  padding-top: 5px;
+  padding-right: 5px;
+}
+
 .input-img {
   max-height: 200px;
   max-width: 270px
@@ -35,13 +62,7 @@ a {
 
 .output-box {
   max-width: 300px;
-  border: solid 1px;
+  /* border: solid 1px; */
   padding: 3px;
   text-align: center;
-}
-
-.post {
-  width: 300px;
-  margin: 5px;
-  border: solid 1px;
 }
