@@ -36,6 +36,7 @@ async function loadPosts() {
 }
 
 async function loadFav() {
+     document.getElementById("fav_box").innerHTML ="";
   let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
   let collectSign = "&#9733;";
   for (let i = 0; i < postsJson.length; i++) {
@@ -43,9 +44,7 @@ async function loadFav() {
     let result = `<div class="post">
         <div class="description-box">
         <p>Description:${postInfo.description}</p>
-        <div class="star">${
-          postInfo.isFav == true ? collectSign : nonCollectSign
-        }</div>
+        <div class="star">${collectSign}</div>
         </div>
         ${postInfo.htmlPreview}</div>`;
     document.getElementById("fav_box").innerHTML += result;

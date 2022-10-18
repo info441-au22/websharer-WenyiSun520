@@ -15,29 +15,29 @@
     <div id="errorInfo" class="alert alert-danger fade show" role="alert" style="opacity:0"></div>
     <div id="identity_div"></div>
   </nav>
-  <h1>Website Sharer <button onclick="loadPosts()">refresh</button></h1>
-  <hr>
+  <div class="body-content">
+      <h1>Website Sharer <button onclick="loadPosts()">refresh</button></h1>
+<hr>
   <h2>Posts:</h2>
   <div id="posts_box"></div>
   <hr>
-
   <h2>My Favorate Website: </h2>
   <button onclick="loadFav()">refresh</button>
   <div id="fav_box"></div>
   <hr>
-  
   <h2>Post new website:</h2>
   <p>Enter a description of your post (e.g., your reason for sharing)</p>
   <textarea type="text" id="descriptionInput" rows="4" cols="50"
     placeholder="why you want to share the website..."></textarea>
   <P>Do you want to add this website as favorate?</P>
   <input type="radio" id="fav" value="true">
-  <label for="html">Add to my Fav List</label><br>
+  <label for="html">&#9733; Add to my Fav List</label><br>
   <input type="radio" id="fav" value="false">
-  <label for="html">No, thanks</label><br>
+  <label for="html">&#9734; No, thanks</label><br>
   <p>Enter the website url</p><input type="text" id="urlInput" />
   <button onclick="postUrl()">Post</button> <span id="postStatus"></span>
   <div id="url_previews"></div>
+  </div>
 </body>
 
 </html>
