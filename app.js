@@ -5,6 +5,7 @@ import logger from 'morgan';
 
 
 import apiv2Router from './routes/api/v2/apiv2.js'; // load apiv2 router
+import models from './models.js'
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -19,6 +20,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); 
+app.use((req,res,next)=>{
+    req.models = models;
+    next();
+
+})
 
 app.use('/api/v2/', apiv2Router);
 

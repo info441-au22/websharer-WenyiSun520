@@ -7,13 +7,25 @@ a {
   color: #00B7FF;
 }
 
-#posts_box{
+#posts_box {
   display: flex;
   flex-wrap: wrap;
 }
 
-.post{
-  width:300px;
-  margin:5px;
+.input-img {
+  max-height: 200px;
+  max-width: 270px
+}
+
+.output-box {
+  max-width: 300px;
+  border: solid 1px;
+  padding: 3px;
+  text-align: center;
+}
+
+.post {
+  width: 300px;
+  margin: 5px;
   border: solid 1px;
 }

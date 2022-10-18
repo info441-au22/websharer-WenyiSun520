@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-
 import parser from "node-html-parser";
 
 async function getURLPreview(url) {
