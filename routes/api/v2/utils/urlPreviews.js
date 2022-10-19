@@ -27,8 +27,6 @@ async function getURLPreview(url) {
   let titleTag = htmlPage.querySelector('meta[property="og:title"]');
   let descripTag = htmlPage.querySelector('meta[property="og:description"]');
   let imgTag = htmlPage.querySelector('meta[property="og:image"]');
-  let quoteTag = urlTag.getAttribute("content") + "quotes/?ref_=tt_trv_qu";
-  
 
   if (urlTag != undefined && urlTag.getAttribute("content") == "") {
     urlTag.setAttribute("content", url);
@@ -40,7 +38,7 @@ async function getURLPreview(url) {
   let results = `
     <div class='output-box'>
     <a href=
-    ${urlTag == undefined ? url: urlTag.getAttribute("content")}
+    ${urlTag == undefined ? url : urlTag.getAttribute("content")}
     ><br>
     <p><strong>
      ${titleTag == undefined ? htmlTitle : titleTag.getAttribute("content")} 
