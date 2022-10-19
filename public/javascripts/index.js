@@ -55,7 +55,7 @@ async function postUrl() {
   document.getElementById("postStatus").innerHTML = "sending data...";
   let url = document.getElementById("urlInput").value;
   let description = document.getElementById("descriptionInput").value;
-  let isFav = document.getElementById("fav").value;
+  let isFav = document.querySelector('input[name = "fav"]:checked').value;
 
   try {
     await fetchJSON(`api/${apiVersion}/posts`, {
@@ -68,7 +68,7 @@ async function postUrl() {
   }
   document.getElementById("urlInput").value = "";
   document.getElementById("descriptionInput").value = "";
-  document.getElementById("fav").value = "";
+  document.querySelector('input[name = "fav"]:checked').value= "";
   document.getElementById("url_previews").innerHTML = "";
   document.getElementById("postStatus").innerHTML = "successfully uploaded";
   loadPosts();

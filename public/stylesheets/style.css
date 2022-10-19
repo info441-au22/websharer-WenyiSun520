@@ -35,7 +35,13 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-y: scroll;
 }
+
+#posts_box {
+  height: 550px;
+}
+
 
 .post {
   width: 300px;
@@ -71,7 +77,11 @@ a {
 
 .output-box {
   max-width: 300px;
-  /* border: solid 1px; */
+  border: solid 1px;
   padding: 3px;
   text-align: center;
+}
+
+.post .output-box {
+  border: none;
 }
