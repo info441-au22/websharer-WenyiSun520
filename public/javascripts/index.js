@@ -25,7 +25,7 @@ async function loadPosts() {
         ${postInfo.htmlPreview}</div>`;
     document.getElementById("posts_box").innerHTML += result;
   }
-
+  // Kyle's code:
   // let postsHtml = postsJson.map(postInfo => {
   //     return `<div class="post">
   //     ${postInfo.description}
@@ -36,7 +36,7 @@ async function loadPosts() {
 }
 
 async function loadFav() {
-     document.getElementById("fav_box").innerHTML ="";
+  document.getElementById("fav_box").innerHTML = "";
   let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
   let collectSign = "&#9733;";
   for (let i = 0; i < postsJson.length; i++) {
@@ -68,7 +68,7 @@ async function postUrl() {
   }
   document.getElementById("urlInput").value = "";
   document.getElementById("descriptionInput").value = "";
-  document.querySelector('input[name = "fav"]:checked').value= "";
+  document.querySelector('input[name = "fav"]:checked').value = "";
   document.getElementById("url_previews").innerHTML = "";
   document.getElementById("postStatus").innerHTML = "successfully uploaded";
   loadPosts();
