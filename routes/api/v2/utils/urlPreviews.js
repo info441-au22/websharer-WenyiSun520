@@ -23,40 +23,20 @@ async function getURLPreview(url) {
     avgRating = "Average Rating: " + movieInfoJson.aggregateRating.ratingValue;
     genre = "Genre: " + movieInfoJson.genre;
   }
+  let urlTag = htmlPage.querySelector('meta[property="og:url"]');
+  let titleTag = htmlPage.querySelector('meta[property="og:title"]');
+  let descripTag = htmlPage.querySelector('meta[property="og:description"]');
+  let imgTag = htmlPage.querySelector('meta[property="og:image"]');
+  let quoteTag = urlTag.getAttribute("content") + "quotes/?ref_=tt_trv_qu";
+  
 
-  let metaTags = htmlPage.querySelectorAll("meta"); // select all meta tags
-
-  let basicMeta = metaTags.filter((tag) => {
-    let propertyOfTag = tag.getAttribute("property");
-    if (
-      propertyOfTag == "og:title" ||
-      propertyOfTag == "og:url" ||
-      propertyOfTag == "og:description" ||
-      propertyOfTag == "og:image"
-    )
-      return true;
-    else return false;
-  });
-
-  let urlTag = basicMeta.find(
-    (tag) => tag.getAttribute("property") == "og:url"
-  );
   if (urlTag != undefined && urlTag.getAttribute("content") == "") {
     urlTag.setAttribute("content", url);
   }
-
-  let titleTag = basicMeta.find(
-    (tag) => tag.getAttribute("property") == "og:title"
-  );
   let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
   if (htmlTitle == undefined) {
     htmlTitle = url;
   }
-  let imgTag = basicMeta.find((tag) => tag.attributes.property == "og:image");
-  let descripTag = basicMeta.find(
-    (tag) => tag.attributes.property == "og:description"
-  );
-
   let results = `
     <div class='output-box'>
     <a href=
