@@ -1,19 +1,18 @@
 import fetch from "node-fetch";
 import parser from "node-html-parser";
-
+const escapeHTML = (str) =>
+  str.replace(
+    /[&<>'"]/g,
+    (tag) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&#39;",
+        '"': "&quot;",
+      }[tag])
+  );
 async function getURLPreview(url) {
-  const escapeHTML = (str) =>
-    str.replace(
-      /[&<>'"]/g,
-      (tag) =>
-        ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          "'": "&#39;",
-          '"': "&quot;",
-        }[tag])
-    );
   try {
     let urlRawContents = await fetch(url);
     let urlTextContents = await urlRawContents.text();
@@ -38,20 +37,22 @@ async function getURLPreview(url) {
 
     // create a tagmap and store updated tags to tagMap:
     let tagMap = new Map();
-    if (urlTag != null) {
-      if (urlTag.getAttribute("content") == undefined) {
-        urlTag.setAttribute("content", url);
-      }
+    // if url open graph is missing:
+    if (urlTag == null) {
+      urlTag = url;
+      tagMap.set("og:url", urlTag);
+    } else {
       tagMap.set("og:url", urlTag.getAttribute("content"));
     }
-    if (titleTag != null) {
-      if (titleTag.getAttribute("content") == undefined) {
-        let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
-        if (htmlTitle === undefined) {
-          htmlTitle = url;
-        }
-        titleTag.setAttribute("content", htmlTitle);
+    // if title open  graph is missing:
+    if (titleTag == null) {
+      let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
+      if (htmlTitle === undefined) {
+        htmlTitle = url;
       }
+      titleTag = htmlTitle;
+      tagMap.set("og:title", titleTag);
+    } else {
       tagMap.set("og:title", titleTag.getAttribute("content"));
     }
     if (descripTag != null)
@@ -66,7 +67,6 @@ async function getURLPreview(url) {
       let updateContent = escapeHTML(content);
       tagMap.set(key, updateContent);
     }
-
     let results = `
     <div class='output-box'>
     <a href=
