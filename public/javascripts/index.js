@@ -11,7 +11,6 @@ async function loadPosts() {
   let postsJson = await fetchJSON(`api/${apiVersion}/posts`);
   let collectSign = "&#9733;";
   let nonCollectSign = "&#9734;";
-  // let result = "";
   document.getElementById("posts_box").innerText = "";
   for (let i = 0; i < postsJson.length; i++) {
     let postInfo = postsJson[i];
@@ -36,9 +35,10 @@ async function loadPosts() {
 }
 
 async function loadFav() {
-  document.getElementById("fav_box").innerHTML = "";
+  document.getElementById("fav_box").innerHTML = "loading...";
   let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
   let collectSign = "&#9733;";
+  document.getElementById("fav_box").innerHTML = "";
   for (let i = 0; i < postsJson.length; i++) {
     let postInfo = postsJson[i];
     let result = `<div class="post">
