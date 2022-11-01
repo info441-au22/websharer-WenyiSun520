@@ -2,6 +2,18 @@ import fetch from "node-fetch";
 import parser from "node-html-parser";
 
 async function getURLPreview(url) {
+  const escapeHTML = (str) =>
+    str.replace(
+      /[&<>'"]/g,
+      (tag) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "'": "&#39;",
+          '"': "&quot;",
+        }[tag])
+    );
   try {
     let urlRawContents = await fetch(url);
     let urlTextContents = await urlRawContents.text();
@@ -24,30 +36,55 @@ async function getURLPreview(url) {
     let descripTag = htmlPage.querySelector('meta[property="og:description"]');
     let imgTag = htmlPage.querySelector('meta[property="og:image"]');
 
-    if (urlTag != undefined && urlTag.getAttribute("content") == "") {
-      urlTag.setAttribute("content", url);
+    // create a tagmap and store updated tags to tagMap:
+    let tagMap = new Map();
+    if (urlTag != null) {
+      if (urlTag.getAttribute("content") == undefined) {
+        urlTag.setAttribute("content", url);
+      }
+      tagMap.set("og:url", urlTag.getAttribute("content"));
     }
-    let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
-    if (htmlTitle == undefined) {
-      htmlTitle = url;
+    if (titleTag != null) {
+      if (titleTag.getAttribute("content") == undefined) {
+        let htmlTitle = htmlPage.getElementsByTagName("title")[0].textContent;
+        if (htmlTitle === undefined) {
+          htmlTitle = url;
+        }
+        titleTag.setAttribute("content", htmlTitle);
+      }
+      tagMap.set("og:title", titleTag.getAttribute("content"));
     }
+    if (descripTag != null)
+      tagMap.set("og:description", descripTag.getAttribute("content"));
+
+    if (imgTag != null) tagMap.set("og:image", imgTag.getAttribute("content"));
+    // go throw map and escapehtml for every tag contents
+    const iter = tagMap.keys();
+    for (let i = 0; i < tagMap.size; i++) {
+      let key = iter.next().value;
+      let content = tagMap.get(key);
+      let updateContent = escapeHTML(content);
+      tagMap.set(key, updateContent);
+    }
+
     let results = `
     <div class='output-box'>
     <a href=
-    ${urlTag == undefined ? url : urlTag.getAttribute("content")}
+    ${tagMap.get("og:url")}
     ><br>
     <p><strong>
-     ${titleTag == undefined ? htmlTitle : titleTag.getAttribute("content")} 
+     ${tagMap.get("og:title")} 
     </strong></p>
     <p><strong>
     ${avgRating} 
     </strong></p>
     <img class="input-img" src=
-    ${imgTag == undefined ? "" : imgTag.getAttribute("content")}> 
+    ${tagMap.get("og:image")}> 
     </a><p>
     ${genre}
     </p><p>
-    ${descripTag == undefined ? "" : descripTag.getAttribute("content")}
+    ${tagMap.get("og:description")};
+)}
     </p>`;
 
     return results;
