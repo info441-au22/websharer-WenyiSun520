@@ -3,28 +3,32 @@ function init() {
   urlInput.onkeyup = previewUrl;
   urlInput.onchange = previewUrl;
   urlInput.onclick = previewUrl;
+
+  await loadIdentity();
   loadPosts();
 }
 
 async function loadPosts() {
   document.getElementById("posts_box").innerText = "Loading...";
   let postsJson = await fetchJSON(`api/${apiVersion}/posts`);
-  let collectSign = "&#9733;";
-  let nonCollectSign = "&#9734;";
-  // let result = "";
-  document.getElementById("posts_box").innerText = "";
-  for (let i = 0; i < postsJson.length; i++) {
-    let postInfo = postsJson[i];
-    let result = `<div class="post">
-                <div class="description-box">
-        <p>Description:${postInfo.description}</p>
-        <div class="star">${
-          postInfo.isFav == true ? collectSign : nonCollectSign
-        }</div>
-        </div>
-        ${postInfo.htmlPreview}</div>`;
-    document.getElementById("posts_box").innerHTML += result;
-  }
+  let postsHtml = createPostsHtml(postsJson);
+  document.getElementById("posts_box").innerHTML = postsHtml;
+  // let collectSign = "&#9733;";
+  // let nonCollectSign = "&#9734;";
+  // // let result = "";
+  // document.getElementById("posts_box").innerText = "";
+  // for (let i = 0; i < postsJson.length; i++) {
+  //   let postInfo = postsJson[i];
+  //   let result = `<div class="post">
+  //               <div class="description-box">
+  //       <p>Description:${postInfo.description}</p>
+  //       <div class="star">${
+  //         postInfo.isFav == true ? collectSign : nonCollectSign
+  //       }</div>
+  //       </div>
+  //       ${postInfo.htmlPreview}</div>`;
+  //   document.getElementById("posts_box").innerHTML += result;
+  //}
   // Kyle's code:
   // let postsHtml = postsJson.map(postInfo => {
   //     return `<div class="post">
@@ -35,27 +39,27 @@ async function loadPosts() {
   // document.getElementById("posts_box").innerHTML = postsHtml;
 }
 
-async function loadFav() {
-  document.getElementById("fav_box").innerHTML = "";
-  let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
-  let collectSign = "&#9733;";
-  for (let i = 0; i < postsJson.length; i++) {
-    let postInfo = postsJson[i];
-    let result = `<div class="post">
-        <div class="description-box">
-        <p>Description:${postInfo.description}</p>
-        <div class="star">${collectSign}</div>
-        </div>
-        ${postInfo.htmlPreview}</div>`;
-    document.getElementById("fav_box").innerHTML += result;
-  }
-}
+// async function loadFav() {
+//   document.getElementById("fav_box").innerHTML = "";
+//   let postsJson = await fetchJSON(`api/${apiVersion}/posts/fav`);
+//   let collectSign = "&#9733;";
+//   for (let i = 0; i < postsJson.length; i++) {
+//     let postInfo = postsJson[i];
+//     let result = `<div class="post">
+//         <div class="description-box">
+//         <p>Description:${postInfo.description}</p>
+//         <div class="star">${collectSign}</div>
+//         </div>
+//         ${postInfo.htmlPreview}</div>`;
+//     document.getElementById("fav_box").innerHTML += result;
+//   }
+// }
 
 async function postUrl() {
   document.getElementById("postStatus").innerHTML = "sending data...";
   let url = document.getElementById("urlInput").value;
   let description = document.getElementById("descriptionInput").value;
-  let isFav = document.querySelector('input[name = "fav"]:checked').value;
+  // let isFav = document.querySelector('input[name = "fav"]:checked').value;
 
   try {
     await fetchJSON(`api/${apiVersion}/posts`, {
@@ -68,7 +72,7 @@ async function postUrl() {
   }
   document.getElementById("urlInput").value = "";
   document.getElementById("descriptionInput").value = "";
-  document.querySelector('input[name = "fav"]:checked').value = "";
+  // document.querySelector('input[name = "fav"]:checked').value = "";
   document.getElementById("url_previews").innerHTML = "";
   document.getElementById("postStatus").innerHTML = "successfully uploaded";
   loadPosts();
@@ -103,7 +107,9 @@ async function previewUrl() {
       lastURLPreviewed = url; // mark this url as one we are previewing
       document.getElementById("url_previews").innerHTML = "Loading preview...";
       try {
-        let response = await fetch(`api/${apiVersion}/urls/preview?url=` + url);
+        let response = await fetch(
+          `api/${apiVersion}/urls/preview?url=` + encodeURIComponent(url)
+        );
         let previewHtml = await response.text();
         if (url == lastURLPreviewed) {
           document.getElementById("url_previews").innerHTML = previewHtml;

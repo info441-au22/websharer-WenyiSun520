@@ -6,22 +6,25 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="javascripts/api_version.js"></script>
-  <script src="javascripts/fetchUtils.js"></script>
+  <script src="javascripts/utils.js"></script>
+  <script src="javascripts/identity.js"></script>
   <script src="javascripts/index.js"></script>
 </head>
 
 <body onload="init()">
   <nav class="navbar navbar-light bg-light">
     <div id="errorInfo" class="alert alert-danger fade show" role="alert" style="opacity:0"></div>
-    <div id="identity_div"></div>
+    <div id="identity_div">loading...</div>
   </nav>
   <div class="body-content">
-    <h1>Website Sharer <button onclick="loadPosts()">refresh</button></h1>
+    <h1>Website Sharer</h1>
     <hr>
     <h2>Posts:</h2>
+    <button onclick="loadPosts()">refresh</button>
     <div id="posts_box"></div>
     <hr>
-    <h2>My Favorate Website: </h2>
+    <!-- customize part -->
+    <!-- <h2>My Favorate Website: </h2>
     <button onclick="loadFav()">refresh</button>
     <div id="fav_box"></div>
     <hr>
@@ -33,7 +36,8 @@
     <input type="radio" name="fav" value="true">
     <label for="html">&#9733; Add to my Fav List</label><br>
     <input type="radio" name="fav" value="false">
-    <label for="html">&#9734; No, thanks</label><br>
+    <label for="html">&#9734; No, thanks</label><br> -->
+    <!-- customize part -->
     <p>Enter the website url</p><input type="text" id="urlInput" />
     <button onclick="postUrl()">Post</button> <span id="postStatus"></span>
     <div id="url_previews"></div>
