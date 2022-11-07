@@ -32,14 +32,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:username?", async (req, res) => {
+router.get("/", async (req, res) => {
   let resultsArr = [];
   let resultPosts = "";
-  console.log("req.username: "+req.username)
-  if(req.username != undefined){
-    let user = req.username;
-    resultPosts = await req.models.Post.find({username: user})
-  }else{
+  if (req.session.isAuthenticated) {
+    let user = req.session.account.username;
+    resultPosts = await req.models.Post.find({ username: user });
+  } else {
     resultPosts = await req.models.Post.find();
   }
   try {

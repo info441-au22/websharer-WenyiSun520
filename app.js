@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import sessions from "express-session";
+import session from "express-session";
 import msIdExpress from "microsoft-identity-express";
 const appSettings = {
   appCredentials: {
@@ -11,7 +11,7 @@ const appSettings = {
     clientSecret: "5IF8Q~i0G_c8Kfth4WVv_z-vX3XF_9Qtxv0jWa~L",
   },
   authRoutes: {
-    redirect: "https://wenyis.tech/redirect",
+    redirect: "http://localhost:3000/redirect",
     error: "/error",
     unauthorized: "/unauthorized",
   },
@@ -39,8 +39,8 @@ app.use((req, res, next) => {
 });
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(
-  sessions({
-    secret: "thisismysecretkeyofthesessionabcd12se387sf",
+  session({
+    secret: "this8is7a6secret5of4a5",
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
     resave: false,
@@ -49,6 +49,7 @@ app.use(
 const msid = new msIdExpress.WebAppAuthClientBuilder(appSettings).build();
 app.use(msid.initialize());
 app.use("/api/v3/", apiv3Router);
+
 app.get("/signin", msid.signIn({ postLoginRedirect: "/" }));
 app.get("/signout", msid.signOut({ postLogoutRedirect: "/" }));
 app.get("/error", (req, res) => {
@@ -58,29 +59,29 @@ app.get("/unauthorized", (req, res) => {
   res.status(401).send("Error: Unauthorized");
 });
 
-// use this by going to urls like: 
-// http://localhost:3000/fakelogin?name=anotheruser
-app.get('/fakelogin', (req, res) => {
-    let newName = req.query.name;
-    let session=req.session;
-    session.isAuthenticated = true;
-    if(!session.account){
-        session.account = {};
-    }
-    session.account.name = newName;
-    session.account.username = newName;
-    console.log("set session");
-    res.redirect("/api/v3/getIdentity");
-});
+// // use this by going to urls like: 
+// // http://localhost:3000/fakelogin?name=anotheruser
+// app.get('/fakelogin', (req, res) => {
+//     let newName = req.query.name;
+//     let session=req.session;
+//     session.isAuthenticated = true;
+//     if(!session.account){
+//         session.account = {};
+//     }
+//     session.account.name = newName;
+//     session.account.username = newName;
+//     console.log("set session");
+//     res.redirect("/api/v3/getIdentity");
+// });
 
-// use this by going to a url like: 
-// http://localhost:3000/fakelogout
-app.get('/fakelogout', (req, res) => {
-    let newName = req.query.name;
-    let session=req.session;
-    session.isAuthenticated = false;
-    session.account = {};
-    console.log("you have fake logged out");
-    res.redirect("/api/v3/getIdentity");
-});
+// // use this by going to a url like: 
+// // http://localhost:3000/fakelogout
+// app.get('/fakelogout', (req, res) => {
+//     let newName = req.query.name;
+//     let session=req.session;
+//     session.isAuthenticated = false;
+//     session.account = {};
+//     console.log("you have fake logged out");
+//     res.redirect("/api/v3/getIdentity");
+// });
 export default app;
