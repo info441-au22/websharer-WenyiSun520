@@ -11,13 +11,13 @@ const appSettings = {
     clientSecret: "5IF8Q~i0G_c8Kfth4WVv_z-vX3XF_9Qtxv0jWa~L",
   },
   authRoutes: {
-    redirect: "/redirect",
+    redirect: "https://wenyis.tech/redirect",
     error: "/error",
     unauthorized: "/unauthorized",
   },
 };
 
-import apiv3Router from "./routes/api/v3/apiv3.js"; // load apiv2 router
+import apiv3Router from "./routes/api/v3/apiv3.js"; // load apiv3 router
 import models from "./models.js";
 
 import { fileURLToPath } from "url";
