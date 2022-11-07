@@ -11,8 +11,8 @@ async function main(){
     const postSchema = new mongoose.Schema({
         url: String,
         description: String,
-        isFav: Boolean,
-        created_date: Date
+        created_date: Date,
+        username: String
     })
     console.log("Connect to mongodb successfully!");
      // save the model in the global variable "models" with key post

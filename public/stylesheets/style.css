@@ -1,34 +1,51 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
-  background-color: darkgray;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font: 14px
+  padding: 0 50px 0 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.body-content {
-  padding: 50px;
-}
-
-.navbar {
-  padding: 0;
-  background-image: url("./bgpic.jpeg");
-  height: 120px;
+nav.navbar {
+  position: fixed;
+  /* Set the navbar to fixed position */
+  top: 0;
+  /* Position the navbar at the top of the page */
+  width: 80%
 }
 
 h1 {
-  padding-left: 30%;
+  margin-top: 70px;
 }
 
 a {
-  color: whitesmoke;
+  color: #00B7FF;
 }
 
+#posts_box {
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.post {
+  width: 300px;
+  margin: 5px;
+  border: solid 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.heart_button {
+  color: red;
+}
+
+.comments-box {
+  border: 1px black solid;
+  margin: 10px;
+}
+
+.individual-comment-box {
+  border: 1px black solid;
+  margin: 3px;
+}
 
 #posts_box, #fav_box {
   width: 100%;
@@ -38,9 +55,9 @@ a {
   overflow-y: scroll;
 }
 
-/* #posts_box {
+#posts_box {
   height: 550px;
-} */
+}
 
 
 .post {
