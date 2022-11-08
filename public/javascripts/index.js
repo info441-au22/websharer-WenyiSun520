@@ -5,14 +5,15 @@ async function init(){
     urlInput.onclick = previewUrl;
 
     await loadIdentity();
-    loadPosts();
+    loadPosts(myIdentity);
 }
 
-async function loadPosts(){
-    document.getElementById("posts_box").innerText = "Loading...";
-    let postsJson = await fetchJSON(`api/${apiVersion}/posts`)
-    let postsHtml = createPostsHtml(postsJson)
-    // document.getElementById("posts_box").innerHTML = postsHtml;
+async function loadPosts(myIdentity) {
+  document.getElementById("posts_box").innerText = "Loading...";
+  let postsJson = await fetchJSON(
+    `api/${apiVersion}/posts/username?name=` + myIdentity);
+  let postsHtml = createPostsHtml(postsJson);
+  // document.getElementById("posts_box").innerHTML = postsHtml;
 }
 
 async function postUrl(){

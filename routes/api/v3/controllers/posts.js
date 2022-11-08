@@ -32,15 +32,19 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:username?", async (req, res) => {
+  let username = req.query.name;
   let resultsArr = [];
   let resultPosts = "";
-  if (req.session.isAuthenticated) {
-    let user = req.session.account.username;
-    resultPosts = await req.models.Post.find({ username: user });
-  } else {
-    resultPosts = await req.models.Post.find();
+  console.log("username: "+username)
+  if (username == "undefined"){
+        resultPosts = await req.models.Post.find();
+
+  }else{
+        resultPosts = await req.models.Post.find({ username: username });
+
   }
+  
   try {
     resultsArr = await Promise.all(
       resultPosts.map(async (post) => {
