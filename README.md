@@ -1,9 +1,9 @@
 # A5:
-## Customized Domain
+## Customized Domain (web probably die after login, still don't figure out)
 - https://wenyis.tech
   
 
-## Localhost:3000:
+## Localhost:3000:(works fine)
 - http://localhost:3000
 
 
