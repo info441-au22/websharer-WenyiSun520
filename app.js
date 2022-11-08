@@ -8,11 +8,11 @@ const appSettings = {
   appCredentials: {
     clientId: "8c15ea7e-f9f6-4552-b3a1-fff19c5c024f",
     tenantId: "f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
-    clientSecret: "5IF8Q~i0G_c8Kfth4WVv_z-vX3XF_9Qtxv0jWa~L",
+    clientSecret: "_Wz8Q~NHVWWfTcxrUDIJNnbmSCSkqCIBo-HdlaNM",
   },
   authRoutes: {
-    redirect:"http://localhost:3000/redirect",
-    // redirect: "https://www.wenyis.tech/redirect",
+    // redirect:"http://localhost:3000/redirect",
+    redirect: "https://www.wenyis.tech/redirect",
     error: "/error",
     unauthorized: "/unauthorized",
   },
@@ -44,12 +44,14 @@ app.use(
     secret: "this8is7a6secret5of4a5",
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
-    resave: false,
+    resave: false
   })
 );
+app.use("/api/v3/", apiv3Router);
+
 const msid = new msIdExpress.WebAppAuthClientBuilder(appSettings).build();
 app.use(msid.initialize());
-app.use("/api/v3/", apiv3Router);
+
 
 app.get("/signin", msid.signIn({ postLoginRedirect: "/" }));
 app.get("/signout", msid.signOut({ postLogoutRedirect: "/" }));
