@@ -1,5 +1,7 @@
 # A5:
-## Customized Domain (web probably die after login, still don't figure out)
+## Customized Domain 
+- web wont' redirect after logout, but localhost works fine
+- If you meet the error message(in the picture) after login, try refresh the page, and the error will disappear
 - https://www.wenyis.tech
   
 
