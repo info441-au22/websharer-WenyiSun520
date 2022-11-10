@@ -12,11 +12,20 @@ async function main(){
         url: String,
         description: String,
         created_date: Date,
-        username: String
+        username: String,
+        likes:[String]
     })
+    models.Post = mongoose.model("Post", postSchema);
+
+    const commentSchema = new mongoose.Schema({
+      username: String,
+      comment: String,
+      post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+      created_date: Date,
+    });
     console.log("Connect to mongodb successfully!");
      // save the model in the global variable "models" with key post
-    models.Post = mongoose.model("model", postSchema);
+    models.Comment = mongoose.model('Comment', commentSchema);
 
 }
 
