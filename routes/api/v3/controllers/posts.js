@@ -43,6 +43,7 @@ router.get("/", async (req, res) => {
           description: "",
           htmlPreview: "",
           username: "",
+          created_date:"",
           id:""
         };
         try {
@@ -50,6 +51,7 @@ router.get("/", async (req, res) => {
           obj.htmlPreview = preview;
           obj.description = post.description;
           obj.username = post.username;
+          obj.created_date = post.created_date;
           obj.id = post._id
         } catch (err) {
           obj.htmlPreview = err;
@@ -70,8 +72,8 @@ router.post('/like',async(req,res)=>{
     if (req.session.isAuthenticated) {
         let id = req.body.postID;
         let likePosts = await req.models.Post.findById(id);
-        if(likePosts.username != req.session.account.username){
-          likePosts.username=req.session.account.username;
+        if(!likePosts.likes.includes(req.session.account.username)){
+          likePosts.likes.push(req.session.account.username);
         }
         await likePosts.save();
         res.json({"status":"success"});
@@ -91,8 +93,9 @@ router.post('/unlike',async(req,res)=>{
     if (req.session.isAuthenticated) {
         let id = req.body.postID;
         let unlikePosts = await req.models.Post.findById(id);
-        if(unlikePosts.username == req.session.account.username){
-          lunikePosts.username="";
+        if (unlikePosts.likes.includes(req.session.account.username)) {
+          let index = unlikePosts.likes.indexOf(req.session.account.username);
+          unlikePosts.likes.splice(index, 1);
         }
         await likePosts.save();
         res.json({"status":"success"});
