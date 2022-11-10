@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
           description: "",
           htmlPreview: "",
           username: "",
-          id=""
+          id:""
         };
         try {
           let preview = await getURLPreview(post.url);
@@ -65,13 +65,13 @@ router.get("/", async (req, res) => {
 });
 
 
-router.post('/like',(req,res)=>{
+router.post('/like',async(req,res)=>{
   try{
     if (req.session.isAuthenticated) {
         let id = req.body.postID;
         let likePosts = await req.models.Post.findById(id);
         if(likePosts.username != req.session.account.username){
-          likePosts.username = req.session.account.username;
+          likePosts.username=req.session.account.username;
         }
         await likePosts.save();
         res.json({"status":"success"});
@@ -80,19 +80,19 @@ router.post('/like',(req,res)=>{
       res.status(401).json({status: "error", error: "not logged in"})
     }
   }catch(err){
-    console.log("Error in /like Post Route: "+err);
+    console.log("Error in like Post Route: "+err);
     res.status(500).json({status: "error", error: err})
 
   }
 })
 
-router.post('/unlike',(req,res)=>{
+router.post('/unlike',async(req,res)=>{
   try{
     if (req.session.isAuthenticated) {
         let id = req.body.postID;
         let unlikePosts = await req.models.Post.findById(id);
         if(unlikePosts.username == req.session.account.username){
-          lunikePosts.username = "";
+          lunikePosts.username="";
         }
         await likePosts.save();
         res.json({"status":"success"});
@@ -107,7 +107,7 @@ router.post('/unlike',(req,res)=>{
   }
 })
 
-router.delete('/',(req,res)=>{
+router.delete('/',async(req,res)=>{
   try{
       if (req.session.isAuthenticated) {
         let id = req.body.postID;
