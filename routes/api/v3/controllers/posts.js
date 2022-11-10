@@ -44,7 +44,8 @@ router.get("/", async (req, res) => {
           htmlPreview: "",
           username: "",
           created_date:"",
-          id:""
+          id:"",
+          likes: []
         };
         try {
           let preview = await getURLPreview(post.url);
@@ -52,7 +53,8 @@ router.get("/", async (req, res) => {
           obj.description = post.description;
           obj.username = post.username;
           obj.created_date = post.created_date;
-          obj.id = post._id
+          obj.id = post._id;
+          obj.likes = post.likes;
         } catch (err) {
           obj.htmlPreview = err;
         }
@@ -97,7 +99,7 @@ router.post('/unlike',async(req,res)=>{
           let index = unlikePosts.likes.indexOf(req.session.account.username);
           unlikePosts.likes.splice(index, 1);
         }
-        await likePosts.save();
+        await unlikePosts.save();
         res.json({"status":"success"});
 
     }else{
