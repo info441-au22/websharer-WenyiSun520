@@ -16,7 +16,7 @@ async function main(){
     })
     console.log("Connect to mongodb successfully!");
      // save the model in the global variable "models" with key post
-    models.Post = mongoose.model("model", postSchema);
+    models.Post = mongoose.model("Post", postSchema);
 
 }
 
