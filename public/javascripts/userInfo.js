@@ -21,7 +21,6 @@ async function loadUserInfo(){
     }
     
     //TODO: do an ajax call to load whatever info you want about the user from the user table
-
     loadUserInfoPosts(username)
 }
 
