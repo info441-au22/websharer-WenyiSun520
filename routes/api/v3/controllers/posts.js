@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:username?", async (req, res) => {
-  let username = req.query.name;
+  let username = req.query.username;
   let resultsArr = [];
   let resultPosts = "";
   console.log("username: "+username)

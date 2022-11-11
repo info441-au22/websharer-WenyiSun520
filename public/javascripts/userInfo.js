@@ -19,6 +19,7 @@ async function loadUserInfo(){
 
 async function loadUserInfoPosts(username){
     let postsJson = await fetchJSON(`api/${apiVersion}/posts?username=${encodeURIComponent(username)}`);
-    postsHtml = createPostsHtml(postsJson)
-    document.getElementById("posts_box").innerHTML = postsHtml;
+    postsHtml = createPostsHtml(postsJson);
+
+    // document.getElementById("posts_box").innerHTML = postsHtml;
 }

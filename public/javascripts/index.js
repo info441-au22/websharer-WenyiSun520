@@ -11,7 +11,7 @@ async function init(){
 async function loadPosts(myIdentity) {
   document.getElementById("posts_box").innerText = "Loading...";
   let postsJson = await fetchJSON(
-    `api/${apiVersion}/posts/username?name=` + myIdentity);
+    `api/${apiVersion}/posts/`);
   let postsHtml = createPostsHtml(postsJson);
   // document.getElementById("posts_box").innerHTML = postsHtml;
 }
