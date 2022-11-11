@@ -28,22 +28,53 @@ async function loadUserInfo(){
 async function loadUserInfoPosts(username){
     document.getElementById("posts_box").innerText = "Loading...";
     let postsJson = await fetchJSON(`api/${apiVersion}/posts?username=${encodeURIComponent(username)}`);
-    let postsHtml = postsJson.map(postInfo => {
-        return `
+    document.getElementById("posts_box").innerText = "";
+    for (let i = 0; i < postsJson.length; i++) {
+      let postInfo = postsJson[i];
+      let result = `
         <div class="post">
             ${escapeHTML(postInfo.description)}
             ${postInfo.htmlPreview}
-            <div><a href="/userInfo.html?user=${encodeURIComponent(postInfo.username)}">${escapeHTML(postInfo.username)}</a>, ${escapeHTML(postInfo.created_date)}</div>
+            <div><a href="/userInfo.html?user=${encodeURIComponent(
+              postInfo.username
+            )}">${escapeHTML(postInfo.username)}</a>, ${escapeHTML(
+        postInfo.created_date
+      )}</div>
             <div class="post-interactions">
                 <div>
-                    <span title="${postInfo.likes? escapeHTML(postInfo.likes.join(", ")) : ""}"> ${postInfo.likes ? `${postInfo.likes.length}` : 0} likes </span> &nbsp; &nbsp; 
+                    <span title="${
+                      postInfo.likes
+                        ? escapeHTML(postInfo.likes.join(", "))
+                        : ""
+                    }"> ${
+        postInfo.likes ? `${postInfo.likes.length}` : 0
+      } likes </span> &nbsp; &nbsp; 
                 </div>
                 <br>
-                <div><button onclick='deletePost("${postInfo.id}")' class="${postInfo.username==myIdentity ? "": "d-none"}">Delete</button></div>
+                <div><button onclick='deletePost("${postInfo.id}")' class="${
+        postInfo.username == myIdentity ? "" : "d-none"
+      }">Delete</button></div>
             </div>
-        </div>`
-    }).join("\n");
-    document.getElementById("posts_box").innerHTML = postsHtml;
+        </div>`;
+      document.getElementById("posts_box").innerHTML += result;
+    }
+
+//     let postsHtml = postsJson.map(postInfo => {
+//         return `
+//         <div class="post">
+//             ${escapeHTML(postInfo.description)}
+//             ${postInfo.htmlPreview}
+//             <div><a href="/userInfo.html?user=${encodeURIComponent(postInfo.username)}">${escapeHTML(postInfo.username)}</a>, ${escapeHTML(postInfo.created_date)}</div>
+//             <div class="post-interactions">
+//                 <div>
+//                     <span title="${postInfo.likes? escapeHTML(postInfo.likes.join(", ")) : ""}"> ${postInfo.likes ? `${postInfo.likes.length}` : 0} likes </span> &nbsp; &nbsp; 
+//                 </div>
+//                 <br>
+//                 <div><button onclick='deletePost("${postInfo.id}")' class="${postInfo.username==myIdentity ? "": "d-none"}">Delete</button></div>
+//             </div>
+//         </div>`
+//     }).join("\n");
+//     document.getElementById("posts_box").innerHTML = postsHtml;
 }
 
 
