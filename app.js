@@ -11,8 +11,8 @@ const appSettings = {
     clientSecret: "_Wz8Q~NHVWWfTcxrUDIJNnbmSCSkqCIBo-HdlaNM",
   },
   authRoutes: {
-    redirect:"http://localhost:3000/redirect",
-    // redirect: "https://www.wenyis.tech/redirect",
+    // redirect:"http://localhost:3000/redirect",
+    redirect: "https://www.wenyis.tech/redirect",
     error: "/error",
     unauthorized: "/unauthorized",
   },

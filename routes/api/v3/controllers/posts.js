@@ -37,14 +37,12 @@ router.get("/:username?", async (req, res) => {
   let resultsArr = [];
   let resultPosts = "";
   console.log("username: "+username)
-  if (username == "undefined"){
+  if (username == undefined){
         resultPosts = await req.models.Post.find();
 
   }else{
         resultPosts = await req.models.Post.find({ username: username });
-
   }
-  
   try {
     resultsArr = await Promise.all(
       resultPosts.map(async (post) => {
