@@ -26,9 +26,15 @@ async function getURLPreview(url) {
       );
       let movieRawText = movieInfoScript.childNodes[0].parentNode.rawText;
       let movieInfoJson = JSON.parse(movieRawText);
-      avgRating =
-        "Average Rating: " + movieInfoJson.aggregateRating.ratingValue;
+      // avgRating =
+      //   "Average Rating: " + movieInfoJson.aggregateRating.ratingValue;
       genre = "Genre: " + movieInfoJson.genre;
+
+      movieInfoJson.aggregateRating == undefined
+        ? (avgRating = "Average Rating: N/A")
+        : (avgRating = "Average Rating: " + movieInfoJson.aggregateRating.ratingValue);
+
+
     }
     let urlTag = htmlPage.querySelector('meta[property="og:url"]');
     let titleTag = htmlPage.querySelector('meta[property="og:title"]');
