@@ -27,6 +27,8 @@ async function init() {
 // }
 
 async function saveUserInfo() {
+  //TODO: do an ajax call to save whatever info you want about the user from the user table
+  //see postComment() in the index.js file as an example of how to do this
   let nikename = document.getElementById("nikename-input").value;
   console.log("empty userame: " + nikename);
   let diary = document.getElementById("diary").value;
@@ -34,9 +36,7 @@ async function saveUserInfo() {
     method: "POST",
     body: { nikename: nikename, diary: diary },
   });
-  //TODO: do an ajax call to save whatever info you want about the user from the user table
-  //see postComment() in the index.js file as an example of how to do this
-  init(); 
+  init();
 }
 
 async function loadUserInfo() {
