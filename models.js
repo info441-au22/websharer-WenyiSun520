@@ -26,6 +26,18 @@ async function main(){
     
      // save the model in the global variable "models" with key post
     models.Comment = mongoose.model('Comment', commentSchema);
+
+
+    const userInfoSchema = new mongoose.Schema({
+      username: String,
+      nikename: String,
+      diary: [{
+        created_date: Date,
+        diary_content: String
+      }]
+    })
+    models.UserInfo = mongoose.model("UserInfo", userInfoSchema);
+
     console.log("Connect to mongodb successfully!");
 
 }

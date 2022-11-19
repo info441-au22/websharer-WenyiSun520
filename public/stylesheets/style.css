@@ -90,3 +90,23 @@ a {
 .post .output-box {
   border: none;
 }
+
+#user_info_div {
+  box-sizing: border-box;
+  max-width: 400px;
+  margin: 5px;
+  height: 450px;
+  overflow-y: scroll;
+  border: solid 1px #00B7FF;
+}
+
+
+#user_info_div .single-diary {
+  padding: 3px;
+  max-width: 380px;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  /* border: 50px; */
+  border: solid 1px;
+}
