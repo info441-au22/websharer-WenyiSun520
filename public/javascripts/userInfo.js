@@ -5,27 +5,6 @@ async function init() {
   loadUserInfo();
 }
 
-// async function getGeoLocation() {
-//   if (navigator.geolocation) {
-//       document.getElementById("location-result").innerText = "Loading...";
-
-//     navigator.geolocation.getCurrentPosition((position) => {
-//       let lat = position.coords.latitude;
-//       let long = position.coords.longitude;
-//       saveGeoLocation(lat, long);
-//       document.getElementById(
-//         "location-result"
-//       ).innerHTML = `<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-//   src="https://www.openstreetmap.org/export/embed.html?bbox=${long}%2C${lat}%2C${long}%2C${lat}&amp;
-//   layer=mapnik&amp;marker=${lat}%2C${long}"
-//   style="border: 1px solid black"></iframe><br/>`;
-//     });
-//   } else {
-//     document.getElementById("location-result").innerHTML =
-//       "Geolocation API is not supported by this browser.";
-//   }
-// }
-
 async function saveUserInfo() {
   //TODO: do an ajax call to save whatever info you want about the user from the user table
   //see postComment() in the index.js file as an example of how to do this
@@ -139,3 +118,24 @@ async function deletePost(postID) {
   });
   loadUserInfo();
 }
+
+// async function getGeoLocation() {
+//   if (navigator.geolocation) {
+//       document.getElementById("location-result").innerText = "Loading...";
+
+//     navigator.geolocation.getCurrentPosition((position) => {
+//       let lat = position.coords.latitude;
+//       let long = position.coords.longitude;
+//       saveGeoLocation(lat, long);
+//       document.getElementById(
+//         "location-result"
+//       ).innerHTML = `<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+//   src="https://www.openstreetmap.org/export/embed.html?bbox=${long}%2C${lat}%2C${long}%2C${lat}&amp;
+//   layer=mapnik&amp;marker=${lat}%2C${long}"
+//   style="border: 1px solid black"></iframe><br/>`;
+//     });
+//   } else {
+//     document.getElementById("location-result").innerHTML =
+//       "Geolocation API is not supported by this browser.";
+//   }
+// }
