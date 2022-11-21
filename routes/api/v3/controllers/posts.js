@@ -32,9 +32,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:username?", async (req, res) => {
+  let username = req.query.username;
   let resultsArr = [];
-  let resultPosts = await req.models.Post.find();
+  let resultPosts = "";
+  if (username == undefined) {
+    resultPosts = await req.models.Post.find();
+  } else {
+    resultPosts = await req.models.Post.find({ username: username });
+  }
 
   try {
     resultsArr = await Promise.all(
@@ -43,9 +49,9 @@ router.get("/", async (req, res) => {
           description: "",
           htmlPreview: "",
           username: "",
-          created_date:"",
-          id:"",
-          likes: []
+          created_date: "",
+          id: "",
+          likes: [],
         };
         try {
           let preview = await getURLPreview(post.url);
@@ -68,70 +74,66 @@ router.get("/", async (req, res) => {
   res.send(resultsArr);
 });
 
-
-router.post('/like',async(req,res)=>{
-  try{
+router.post("/like", async (req, res) => {
+  try {
     if (req.session.isAuthenticated) {
-        let id = req.body.postID;
-        let likePosts = await req.models.Post.findById(id);
-        if(!likePosts.likes.includes(req.session.account.username)){
-          likePosts.likes.push(req.session.account.username);
-        }
-        await likePosts.save();
-        res.json({"status":"success"});
-
-    }else{
-      res.status(401).json({status: "error", error: "not logged in"})
-    }
-  }catch(err){
-    console.log("Error in like Post Route: "+err);
-    res.status(500).json({status: "error", error: err})
-
-  }
-})
-
-router.post('/unlike',async(req,res)=>{
-  try{
-    if (req.session.isAuthenticated) {
-        let id = req.body.postID;
-        let unlikePosts = await req.models.Post.findById(id);
-        if (unlikePosts.likes.includes(req.session.account.username)) {
-          let index = unlikePosts.likes.indexOf(req.session.account.username);
-          unlikePosts.likes.splice(index, 1);
-        }
-        await unlikePosts.save();
-        res.json({"status":"success"});
-
-    }else{
-      res.status(401).json({status: "error", error: "not logged in"})
-    }
-  }catch(err){
-    console.log("Error in unlike Post Route: "+err);
-    res.status(500).json({status: "error", error: err})
-
-  }
-})
-
-router.delete('/',async(req,res)=>{
-  try{
-      if (req.session.isAuthenticated) {
-        let id = req.body.postID;
-        let userPosts = await req.models.Post.findById(id);
-        if(userPosts.username != req.session.account.username){
-                res.status(401).json({status: "error", error: "you can only delete your own posts"})
-        }
-        await req.models.Comment.deleteMany({post: id});
-        await req.models.Post.deleteOne({_id : id})
-        res.json({"status":"success"});
-      }else{
-        res.status(401).json({status: "error", error: "not logged in"})
+      let id = req.body.postID;
+      let likePosts = await req.models.Post.findById(id);
+      if (!likePosts.likes.includes(req.session.account.username)) {
+        likePosts.likes.push(req.session.account.username);
       }
-    }catch(err){
-    console.log("Error in delete Post Route: "+err);
-    res.status(500).json({status: "error", error: err})
+      await likePosts.save();
+      res.json({ status: "success" });
+    } else {
+      res.status(401).json({ status: "error", error: "not logged in" });
     }
+  } catch (err) {
+    console.log("Error in like Post Route: " + err);
+    res.status(500).json({ status: "error", error: err });
+  }
+});
 
-})
+router.post("/unlike", async (req, res) => {
+  try {
+    if (req.session.isAuthenticated) {
+      let id = req.body.postID;
+      let unlikePosts = await req.models.Post.findById(id);
+      if (unlikePosts.likes.includes(req.session.account.username)) {
+        let index = unlikePosts.likes.indexOf(req.session.account.username);
+        unlikePosts.likes.splice(index, 1);
+      }
+      await unlikePosts.save();
+      res.json({ status: "success" });
+    } else {
+      res.status(401).json({ status: "error", error: "not logged in" });
+    }
+  } catch (err) {
+    console.log("Error in unlike Post Route: " + err);
+    res.status(500).json({ status: "error", error: err });
+  }
+});
 
+router.delete("/", async (req, res) => {
+  try {
+    if (req.session.isAuthenticated) {
+      let id = req.body.postID;
+      let userPosts = await req.models.Post.findById(id);
+      if (userPosts.username != req.session.account.username) {
+        res.status(401).json({
+          status: "error",
+          error: "you can only delete your own posts",
+        });
+      }
+      await req.models.Comment.deleteMany({ post: id });
+      await req.models.Post.deleteOne({ _id: id });
+      res.json({ status: "success" });
+    } else {
+      res.status(401).json({ status: "error", error: "not logged in" });
+    }
+  } catch (err) {
+    console.log("Error in delete Post Route: " + err);
+    res.status(500).json({ status: "error", error: err });
+  }
+});
 
 export default router;
