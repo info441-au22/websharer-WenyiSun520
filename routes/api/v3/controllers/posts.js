@@ -32,9 +32,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:username?", async (req, res) => {
+  let username = req.query.username;
   let resultsArr = [];
-  let resultPosts = await req.models.Post.find();
+  let resultPosts = "";
+  if (username == undefined) {
+    resultPosts = await req.models.Post.find();
+  } else {
+    resultPosts = await req.models.Post.find({ username: username });
+  }
 
   try {
     resultsArr = await Promise.all(
@@ -43,9 +49,9 @@ router.get("/", async (req, res) => {
           description: "",
           htmlPreview: "",
           username: "",
-          created_date:"",
-          id:"",
-          likes: []
+          created_date: "",
+          id: "",
+          likes: [],
         };
         try {
           let preview = await getURLPreview(post.url);
